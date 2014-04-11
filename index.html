@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <title>What is this!?</title>
+    <link rel="stylesheet" href="styles/styles.css"/>
+  </head>
+  <body>
+    <article>
+      <section>
+        <h1>What is this!?</h1>
+      </section>
+      <section>
+        <h2>よく見る 「this」</h2>
+        <h3>「this」は何を示しているのか？</h3>
+        <hr>
+        <pre><code class="language-javascript">function Person(name, age) {
+   this.name = name;
+   this.age = age;
+}
+
+var tanaka = new Person('tanaka', '18');
+</code></pre>
+      </section>
+      <section>
+        <h2>This is Read Only</h2>
+        <h3>参照してほしいオブジェクトのこと</h3>
+        <ul>
+          <li>関数を呼び出す時まで、this が何か分からない</li>
+          <li>呼び出す時に「これだよ」って渡す</li>
+          <li>関数:「あ、はい」</li>
+        </ul>
+      </section>
+      <section>
+        <h2>グローバル</h2>
+        <hr>
+        <pre><code class="language-javascript">var hello = function(msg) {
+  console.log('MESSAGE:' + msg);
+};
+
+this.hello('hello');
+</code></pre>
+      </section>
+      <section>
+        <h2>オブジェクト</h2>
+        <h3>普通に作って普通に呼び出す</h3>
+        <hr>
+        <pre><code class="language-javascript">var Test = {
+  hello: function(msg) {
+    this.msg = msg;
+    console.log('MESSAGE:', this.msg)
+  }
+};
+
+Test.hello('hello');
+</code></pre>
+      </section>
+      <section>
+        <h2>これだよ！って渡す</h2>
+        <h3>call()</h3>
+        <hr>
+        <pre><code class="language-javascript">var Test = {
+  hello: function(msg) {
+    this.msg = 'MESSAGE:' + msg;
+  }
+};
+
+var obj = {
+  msg: 'hoge'
+};
+
+Test.hello.call(obj, 'Hello');
+console.log(obj.msg);
+</code></pre>
+      </section>
+      <section>
+        <h2>コンストラクタ</h2>
+        <h3>new!</h3>
+        <hr>
+        <pre><code class="language-javascript">var Test = function(msg) {
+  this.msg = msg;
+};
+
+Test.prototype.hello = function() {
+  console.log('MESSAGE:', this.msg)
+};
+
+var newtest = new Test('hello');
+newtest.hello();
+</code></pre>
+      </section>
+      <section>
+        <h2>これはどう？</h2>
+        <hr>
+        <pre><code class="language-javascript">var Test = {
+  hello: function(msg) {
+    var self = this;
+    self.message = msg;
+    self.TITLE = 'TITLE:';
+    
+    return function(name) {
+      console.log(self.TITLE, self.message, name);
+    }
+  }
+};
+
+// Pattern1
+Test.run = Test.hello.call({}, 'Hello');
+Test.run('World');
+
+// Pattern3
+var test = new Test.hello('Good');
+test('Times');
+
+// Pattern2
+var hello = Test.hello('Bad');
+hello('Times');
+</code></pre>
+      </section>
+    </article>
+    <script src="scripts/scripts.js"></script>
+  </body>
+</html>
