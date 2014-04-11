@@ -1,0 +1,144 @@
+doctype html
+html
+  head
+    meta(charset='utf-8')
+    meta(name='viewport', content='width=device-width, initial-scale=1, maximum-scale=1')
+    title What is this!?
+
+    // build:css styles/styles.css
+    //- Check out 'src/bower_components/prism/themes/' for available themes
+    link(rel='stylesheet', type='text/css', href='bower_components/prism/themes/prism-tomorrow.css')
+    link(rel='stylesheet', type='text/css', href='styles/main.css')
+    // endbuild
+
+  body
+
+    article
+
+      section
+        h1 What is this!?
+
+      section
+        h2 よく見る 「this」
+        h3 「this」は何を示しているのか？
+        hr
+        pre
+          code.language-javascript.
+            function Person(name, age) {
+               this.name = name;
+               this.age = age;
+            }
+
+            var tanaka = new Person('tanaka', '18');
+
+      section
+        h2 This is Read Only
+        h3 参照してほしいオブジェクトのこと
+        ul
+          li 関数を呼び出す時まで、this が何か分からない
+          li 呼び出す時に「これだよ」って渡す
+          li 関数:「あ、はい」
+
+      section
+        h2 グローバル
+        hr
+        pre
+          code.language-javascript.
+            var hello = function(msg) {
+              console.log('MESSAGE:' + msg);
+            };
+
+            this.hello('hello');
+
+      section
+        h2 オブジェクト
+        h3 普通に作って普通に呼び出す
+        hr
+        pre
+          code.language-javascript.
+            var Test = {
+              hello: function(msg) {
+                this.msg = msg;
+                console.log('MESSAGE:', this.msg)
+              }
+            };
+
+            Test.hello('hello');
+
+      section
+        h2 これだよ！って渡す
+        h3 call()
+        hr
+        pre
+          code.language-javascript.
+            var Test = {
+              hello: function(msg) {
+                this.msg = 'MESSAGE:' + msg;
+              }
+            };
+
+            var obj = {
+              msg: 'hoge'
+            };
+
+            Test.hello.call(obj, 'Hello');
+            console.log(obj.msg);
+
+      section
+        h2 コンストラクタ
+        h3 new!
+        hr
+        pre
+          code.language-javascript.
+            var Test = function(msg) {
+              this.msg = msg;
+            };
+
+            Test.prototype.hello = function() {
+              console.log('MESSAGE:', this.msg)
+            };
+
+            var newtest = new Test('hello');
+            newtest.hello();
+
+      section
+        h2 これはどう？
+        hr
+        pre
+          code.language-javascript.
+            var Test = {
+              hello: function(msg) {
+                var self = this;
+                self.message = msg;
+                self.TITLE = 'TITLE:';
+                
+                return function(name) {
+                  console.log(self.TITLE, self.message, name);
+                }
+              }
+            };
+
+            // Pattern1
+            Test.run = Test.hello.call({}, 'Hello');
+            Test.run('World');
+
+            // Pattern3
+            var test = new Test.hello('Good');
+            test('Times');
+             
+            // Pattern2
+            var hello = Test.hello('Bad');
+            hello('Times');
+
+    // build:js scripts/scripts.js
+    script(src='bower_components/bespoke.js/dist/bespoke.min.js')
+    script(src='bower_components/bespoke-keys/dist/bespoke-keys.min.js')
+    script(src='bower_components/bespoke-touch/dist/bespoke-touch.min.js')
+    script(src='bower_components/bespoke-bullets/dist/bespoke-bullets.min.js')
+    script(src='bower_components/bespoke-scale/dist/bespoke-scale.min.js')
+    script(src='bower_components/bespoke-hash/dist/bespoke-hash.min.js')
+    script(src='bower_components/bespoke-progress/dist/bespoke-progress.min.js')
+    script(src='bower_components/bespoke-state/dist/bespoke-state.min.js')
+    script(src='bower_components/prism/prism.js')
+    script(src='scripts/main.js')
+    // endbuild
